@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>УъХ | Хроники Дня</title>
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --text-main: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --gradient-main: linear-gradient(135deg, #00ff9d 0%, #ffffff 50%, #ff4d4d 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-hover: rgba(255, 255, 255, 0.07);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Фоновые пятна для красоты */
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .glow-1 {
+            width: 400px;
+            height: 400px;
+            background: #00ff9d;
+            top: -100px;
+            left: -100px;
+        }
+
+        .glow-2 {
+            width: 500px;
+            height: 500px;
+            background: #ff4d4d;
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .glow-3 {
+            width: 300px;
+            height: 300px;
+            background: #ffffff;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.15;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 50px); }
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 60px 20px;
+            z-index: 1;
+        }
+
+        /* Заголовок */
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Секции */
+        section {
+            margin-bottom: 60px;
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.4s; }
+        section:nth-child(4) { animation-delay: 0.6s; }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+            padding-left: 20px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-main);
+            border-radius: 2px;
+        }
+
+        /* Карточки персонажей */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: var(--card-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-main);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        .char-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .char-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .tag-hero { background: rgba(0, 255, 157, 0.15); color: #00ff9d; border: 1px solid rgba(0, 255, 157, 0.3); }
+        .tag-friend { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .tag-villain { background: rgba(255, 77, 77, 0.15); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.3); }
+        .tag-mystery { background: rgba(255, 255, 255, 0.05); color: #aaa; border: 1px dashed rgba(255, 255, 255, 0.3); }
+
+        .card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        /* Блок фактов */
+        .facts-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .fact-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .fact-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .fact-icon {
+            font-size: 1.5rem;
+            margin-right: 20px;
+            min-width: 30px;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .fact-content h3 {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .fact-content p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Кнопка */
+        .btn-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 16px 40px;
+            background: var(--gradient-main);
+            color: #000;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.2);
+        }
+
+        .btn-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            color: #444;
+            font-size: 0.8rem;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.8rem; }
+            .container { padding: 40px 20px; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фоновые эффекты -->
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
+
+    <div class="container">
+        <header>
+            <h1>УъХ</h1>
+            <p class="subtitle">Ежедневные истории жизни. Без приукрашивания. Без финала.</p>
+            <a href="https://t.me/ymry_odin_doma" target="_blank" class="btn-link">Читать в Telegram</a>
+        </header>
+
+        <section>
+            <h2 class="section-title">О Проекте</h2>
+            <div class="card" style="border: none; background: transparent; padding: 0;">
+                <p style="font-size: 1.1rem; color: #ddd;">
+                    Это хроника реальной жизни, записанная в формате <strong>«История Дня»</strong>. 
+                    Здесь нет жалоб на судьбу или нытья об одиночестве. Только сухие, честные записи о том, что произошло за сутки.
+                    Проект планируется вести до <span style="color: #00ff9d;">2027 года</span>. 
+                    История закончится лишь тогда, когда главный герой умрет. Дата неизвестна.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Персонажи</h2>
+            <div class="grid">
+                <!-- УъХ -->
+                <div class="card">
+                    <div class="char-name">УъХ</div>
+                    <span class="char-tag tag-hero">Протагонист</span>
+                    <p>
+                        14-летний парень. Живет один, без родителей, не учится в школе. 
+                        Зарабатывает «легкие деньги». 
+                        <br><br>
+                        <strong>Важно:</strong> Он не пишет о своем одиночестве. Его формат — краткая и точная «История Дня», фиксирующая события без лишних эмоций.
+                    </p>
+                </div>
+
+                <!-- Бро -->
+                <div class="card">
+                    <div class="char-name">Бро</div>
+                    <span class="char-tag tag-friend">Наблюдатель</span>
+                    <p>
+                        Друг главного героя. 
+                        Его роль — не спаситель, а свидетель. Он показывает ситуацию со стороны, дополняя картину происходящего. 
+                        Главный персонаж марта, чьи записи дают полный контекст событий.
+                    </p>
+                </div>
+
+                <!-- Девушка -->
+                <div class="card">
+                    <div class="char-name">Девушка</div>
+                    <span class="char-tag tag-villain">Антагонист</span>
+                    <p>
+                        Персонаж, разрушающий жизнь УъХ своей навязчивой привязанностью. 
+                        Её цель — внимание любой ценой. Она выступает катализатором конфликтов и проблем в историях.
+                    </p>
+                </div>
+
+                <!-- Сергей -->
+                <div class="card">
+                    <div class="char-name">Сергей</div>
+                    <span class="char-tag tag-mystery">Будущее</span>
+                    <p>
+                        Загадочная фигура. Ожидается появление <strong>1 апреля</strong>. 
+                        Станет ключевым персонажем новой арки. На данный момент о нем ничего не известно.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Факты и Детали</h2>
+            <div class="facts-container">
+                <div class="fact-row">
+                    <div class="fact-icon">❖</div>
+                    <div class="fact-content">
+                        <h3>Статус</h3>
+                        <p>Подросток 14 лет, полностью автономный от взрослых. Школа и родители отсутствуют в его уравнении жизни.</p>
+                    </div>
+                </div>
+                <div class="fact-row">
+                    <div class="fact-icon">⚡</div>
+                    <div class="fact-content">
+                        <h3>Доход</h3>
+                        <p>Существует за счет «легких денег». Источники дохода часто находятся на грани риска.</p>
+                    </div>
+                </div>
+                <div class="fact-row">
+                    <div class="fact-icon">∞</div>
+                    <div class="fact-content">
+                        <h3>Длительность</h3>
+                        <p>Создатель обязался вести проект минимум до 2027 года. Финал наступит только со смертью героя.</p>
+                    </div>
+                </div>
+                <div class="fact-row">
+                    <div class="fact-icon">📅</div>
+                    <div class="fact-content">
+                        <h3>Формат</h3>
+                        <p>Ежедневные обновления. Каждый день — новая запись, новый поворот сюжета.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2024 УъХ Project. Все права защищены.<br>Telegram: @ymry_odin_doma</p>
+        </footer>
+    </div>
+
+</body>
+</html>
